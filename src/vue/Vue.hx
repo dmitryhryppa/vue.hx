@@ -20,7 +20,7 @@ extern class Vue {
 
 typedef VueOptions<T> = {
 	el:EitherType<String, HtmlElement>,
-	data:T,
+	?data:T,
 	?methods:Any,
 	?router:VueRouter
 }

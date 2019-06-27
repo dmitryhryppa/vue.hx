@@ -1,0 +1,4 @@
+-p ./../src
+-m Index
+-js ./index.js
+-dce full
