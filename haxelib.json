@@ -1,0 +1,13 @@
+{
+	"name": "vue-hx",
+	"url" : "https://github.com/dmitryhryppa/vue.hx",
+	"license": "MIT",
+	"tags": ["vue", "vue.js"],
+	"description": "Utils and helper classes for rest server apps",
+	"version": "0.0.1",
+	"classPath": "src",
+	"releasenote": "early stage",
+	"contributors": ["dmitryhryppa"],
+	"dependencies": {
+	}
+}
