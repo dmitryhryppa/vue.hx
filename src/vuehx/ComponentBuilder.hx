@@ -35,7 +35,8 @@ class ComponentBuilder {
 		for (entry in c.meta.get()) {
 			if (entry.params.length > 0) {
 				switch (entry.name) {
-					case ":vue.props": {
+					case ":vue.props":
+						{
 							if (entry.params != null) {
 								vueCompFields.push({
 									field: "props",
@@ -46,7 +47,8 @@ class ComponentBuilder {
 								});
 							}
 						}
-					case ":vue.template": {
+					case ":vue.template":
+						{
 							final v:Null<String> = getMetaContent(entry.params[0].expr);
 							if (v != null) {
 								vueCompFields.push(parseTemplate(v, fields));
@@ -120,7 +122,8 @@ class ComponentBuilder {
 			if (field.meta != null) {
 				for (meta in field.meta) {
 					switch field.kind {
-						case FFun(f): {
+						case FFun(f):
+							{
 								switch meta.name {
 									case ":vue.activated": fieldsToBeGenerated.set("activated", f);
 									case ":vue.updated": fieldsToBeGenerated.set("updated", f);
@@ -153,62 +156,73 @@ class ComponentBuilder {
 				for (meta in field.meta) {
 					if (meta.name == ":vue.computed") {
 						switch field.kind {
-							case FVar(t, e): //trace(field.name);
-							case FProp(get, set, t, e): {
-									objFields.push({
-										field: field.name,
-										expr: {
-											expr: EObjectDecl([
-												{
-													field: "get",
+							case FVar(t, e):
+							case FProp(get, set, t, e):
+								trace(get);
+								final getsetFields:Array<ObjectField> = [];
+
+								final getObjectField:Null<ObjectField> = switch (get) {
+									case "never": null;
+									default: {
+											field: "get",
+											expr: {
+												expr: EFunction(null, {
+													args: [],
+													ret: t,
 													expr: {
-														expr: EFunction(null, {
-															args: [],
-															ret: t,
-															expr: {
-																expr: EReturn({
-																	expr: EConst(CIdent(field.name)),
-																	pos: pos
-																}),
-																pos: pos
-															}
+														expr: EReturn({
+															expr: EConst(CIdent(field.name)),
+															pos: pos
 														}),
 														pos: pos
 													}
-												},
-												{
-													field: "set",
-													expr: {
-														expr: EFunction(null, {
-															args: [
-																{
-																	name: "v",
-																	type: t
-																}
-															],
-															ret: t,
-															expr: {
-																expr: EReturn({
-																	expr: EBinop(OpAssign, {
-																		expr: EConst(CIdent(field.name)),
-																		pos: pos
-																	}, {
-																		expr: EConst(CIdent("v")),
-																		pos: pos
-																	}),
-																	pos: pos
-																}),
-																pos: pos
-															}
-														}),
-														pos: pos
-													}
-												}
-											]),
-											pos: pos
+												}),
+												pos: pos
+											}
 										}
-									});
+								};
+
+								final setObjectField:Null<ObjectField> = switch (set) {
+									case "never": null;
+									default: {
+											field: "set",
+											expr: {
+												expr: EFunction(null, {
+													args: [{name: "v", type: t}],
+													ret: t,
+													expr: {
+														expr: EReturn({
+															expr: EBinop(OpAssign, {
+																expr: EConst(CIdent(field.name)),
+																pos: pos
+															}, {
+																expr: EConst(CIdent("v")),
+																pos: pos
+															}),
+															pos: pos
+														}),
+														pos: pos
+													}
+												}),
+												pos: pos
+											}
+										}
+								};
+
+								if (getObjectField != null) {
+									getsetFields.push(getObjectField);
 								}
+								if (setObjectField != null) {
+									getsetFields.push(setObjectField);
+								}
+
+								objFields.push({
+									field: field.name,
+									expr: {
+										expr: EObjectDecl(getsetFields),
+										pos: pos
+									}
+								});
 							case _:
 						}
 					}
@@ -225,7 +239,8 @@ class ComponentBuilder {
 				for (meta in field.meta) {
 					if (meta.name == ":vue.data") {
 						switch field.kind {
-							case FVar(t, e): {
+							case FVar(t, e):
+								{
 									objFields.push({
 										field: field.name,
 										expr: {
@@ -254,7 +269,8 @@ class ComponentBuilder {
 				for (meta in field.meta) {
 					if (meta.name == ":vue.method") {
 						switch field.kind {
-							case FFun(f): {
+							case FFun(f):
+								{
 									objFields.push({
 										field: field.name,
 										expr: {
@@ -277,7 +293,7 @@ class ComponentBuilder {
 	}
 
 	static function genRoute(route:String):Void {
-		//trace(route);
+		// trace(route);
 	}
 
 	static function parseTemplate(template:String, fields:Array<Field>):ObjectField {
@@ -309,7 +325,7 @@ class ComponentBuilder {
 		final startTemplateIndex:Int = vueContent.indexOf("<template>") + 10;
 		final endTemplateIndex:Int = vueContent.indexOf("</template>");
 		final templateContent = vueContent.substring(startTemplateIndex, endTemplateIndex);
-		//trace(templateContent);
+
 		final templateExpr:Expr = macro $v{templateContent};
 		fields.push({
 			name: "template",
@@ -321,7 +337,6 @@ class ComponentBuilder {
 		final startStyleIndex:Int = vueContent.indexOf("<style>") + 7;
 		final endStyleIndex:Int = vueContent.indexOf("</style>");
 		final styleContent = vueContent.substring(startStyleIndex, endStyleIndex);
-		//trace(styleContent);
 
 		return {
 			field: "template",
