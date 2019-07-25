@@ -123,12 +123,16 @@ class ComponentBuilder {
 				for (meta in field.meta) {
 					switch field.kind {
 						case FFun(f):
-							{
-								switch meta.name {
-									case ":vue.activated": fieldsToBeGenerated.set("activated", f);
-									case ":vue.updated": fieldsToBeGenerated.set("updated", f);
-									case ":vue.mounted": fieldsToBeGenerated.set("mounted", f);
-								}
+							switch meta.name {
+								case ":vue.activated": fieldsToBeGenerated.set("activated", f);
+								case ":vue.beforeCreate": fieldsToBeGenerated.set("beforeCreate", f);
+								case ":vue.created": fieldsToBeGenerated.set("created", f);
+								case ":vue.beforeUpdate": fieldsToBeGenerated.set("beforeUpdate", f);
+								case ":vue.updated": fieldsToBeGenerated.set("updated", f);
+								case ":vue.beforeMount": fieldsToBeGenerated.set("beforeMount", f);
+								case ":vue.mounted": fieldsToBeGenerated.set("mounted", f);
+								case ":vue.beforeDestroy": fieldsToBeGenerated.set("beforeDestroy", f);
+								case ":vue.destroyed": fieldsToBeGenerated.set("destroyed", f);
 							}
 						case _:
 					}

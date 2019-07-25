@@ -8,7 +8,13 @@ typedef VueComponentOptions = {
 	?methods:Dynamic,
 	?template:String,
 	?watch:Dynamic,
-	?activated:() -> Void,
+	?beforeCreate:() -> Void,
+	?created:() -> Void,
+	?beforeMount:() -> Void,
+	?mounted:() -> Void,
+	?beforeUpdate:() -> Void,
 	?updated:() -> Void,
-	?mounted:() -> Void
+	?activated:() -> Void,
+	?beforeDestroy:() -> Void,
+	?destroyed:() -> Void
 }
