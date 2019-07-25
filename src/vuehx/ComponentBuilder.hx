@@ -158,7 +158,6 @@ class ComponentBuilder {
 						switch field.kind {
 							case FVar(t, e):
 							case FProp(get, set, t, e):
-								trace(get);
 								final getsetFields:Array<ObjectField> = [];
 
 								final getObjectField:Null<ObjectField> = switch (get) {

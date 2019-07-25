@@ -19,7 +19,7 @@ extern class Vue {
 	public function new<T>(options:VueOptions<T>);
 
 	public inline function getStore<T>():Null<T> {
-		return untyped __js__("{0}.store", this);
+		return untyped __js__("{0}.store", this.options);
 	}
 }
 
