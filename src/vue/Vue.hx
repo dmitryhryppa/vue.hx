@@ -1,5 +1,6 @@
 package vue;
 
+import vue.Vuex.Store;
 import vue.VueRouter;
 import haxe.extern.EitherType;
 import js.html.HtmlElement;
@@ -16,10 +17,15 @@ extern class Vue {
 	@:native("$options")
 	public var options:VueOptions<Any>;
 	public function new<T>(options:VueOptions<T>);
+
+	public inline function getStore<T>():Null<T> {
+		return untyped __js__("{0}.store", this);
+	}
 }
 
 typedef VueOptions<T> = {
 	el:EitherType<String, HtmlElement>,
+	?store:Any,
 	?data:T,
 	?methods:Any,
 	?router:VueRouter
