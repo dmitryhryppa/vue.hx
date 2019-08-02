@@ -20,8 +20,12 @@ class Index implements IVueComponent {
 	function new() {
 	}
 
+	function mounted() {
+		trace("I'm mounted!");
+	}
+
 	@:vue.method
-	function onButtonClick():Void {
+	function onButtonClick() {
 		js.Browser.alert("Vue.js + Haxe!");
 	}
 }
