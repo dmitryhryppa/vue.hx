@@ -119,24 +119,41 @@ class ComponentBuilder {
 	static function genLifecycleMethods(pos:Position, fields:Array<Field>):Array<ObjectField> {
 		final fieldsToBeGenerated:StringMap<Function> = new StringMap();
 		for (field in fields) {
-			if (field.meta != null) {
-				for (meta in field.meta) {
-					switch field.kind {
-						case FFun(f):
-							switch meta.name {
-								case ":vue.activated": fieldsToBeGenerated.set("activated", f);
-								case ":vue.beforeCreate": fieldsToBeGenerated.set("beforeCreate", f);
-								case ":vue.created": fieldsToBeGenerated.set("created", f);
-								case ":vue.beforeUpdate": fieldsToBeGenerated.set("beforeUpdate", f);
-								case ":vue.updated": fieldsToBeGenerated.set("updated", f);
-								case ":vue.beforeMount": fieldsToBeGenerated.set("beforeMount", f);
-								case ":vue.mounted": fieldsToBeGenerated.set("mounted", f);
-								case ":vue.beforeDestroy": fieldsToBeGenerated.set("beforeDestroy", f);
-								case ":vue.destroyed": fieldsToBeGenerated.set("destroyed", f);
-							}
-						case _:
+			switch field.kind {
+				case FFun(f):
+					switch field.name {
+						case "activated":
+							fieldsToBeGenerated.set(field.name, f);
+							field.doc = "Called when a kept-alive component is activated.\n\rSee also: https://vuejs.org/v2/guide/instance.html#Lifecycle-Diagram";
+						case "beforeCreate":
+							fieldsToBeGenerated.set(field.name, f);
+							field.doc = "Called synchronously immediately after the instance has been initialized, before data observation and event/watcher setup.\n\rSee also: https://vuejs.org/v2/guide/instance.html#Lifecycle-Diagram";
+						case "created":
+							fieldsToBeGenerated.set(field.name, f);
+							field.doc = "Called synchronously after the instance is created. At this stage, the instance has finished processing the options which means the following have been set up: data observation, computed properties, methods, watch/event callbacks. However, the mounting phase has not been started, and the `$el` property will not be available yet.\n\rSee also: https://vuejs.org/v2/guide/instance.html#Lifecycle-Diagram";
+						case "beforeUpdate":
+							fieldsToBeGenerated.set(field.name, f);
+							field.doc = "Called when data changes, before the DOM is patched. This is a good place to access the existing DOM before an update, e.g. to remove manually added event listeners.\n\rSee also: https://vuejs.org/v2/guide/instance.html#Lifecycle-Diagram";
+						case "updated":
+							fieldsToBeGenerated.set(field.name, f);
+							field.doc = "Called after a data change causes the virtual DOM to be re-rendered and patched.\n\rSee also: https://vuejs.org/v2/guide/instance.html#Lifecycle-Diagram";
+						case "beforeMount":
+							fieldsToBeGenerated.set(field.name, f);
+							field.doc = "Called right before the mounting begins: the `render` function is about to be called for the first time.\n\rSee also: https://vuejs.org/v2/guide/instance.html#Lifecycle-Diagram";
+						case "mounted":
+							field.doc = "Called after the instance has been mounted, where `el` is replaced by the newly created `vm.$el`. If the root instance is mounted to an in-document element, `vm.$el` will also be in-document when `mounted` is called.\n\rSee also: https://vuejs.org/v2/guide/instance.html#Lifecycle-Diagram";
+							fieldsToBeGenerated.set(field.name, f);
+						case "beforeDestroy":
+							fieldsToBeGenerated.set(field.name, f);
+							field.doc = "Called right before a Vue instance is destroyed. At this stage the instance is still fully functional.\n\r**This hook is not called during server-side rendering.**\n\rSee also: https://vuejs.org/v2/guide/instance.html#Lifecycle-Diagram";
+						case "destroyed":
+							fieldsToBeGenerated.set(field.name, f);
+							field.doc = "Called after a Vue instance has been destroyed. When this hook is called, all directives of the Vue instance have been unbound, all event listeners have been removed, and all child Vue instances have also been destroyed.\n\r**This hook is not called during server-side rendering.**\n\rSee also: https://vuejs.org/v2/guide/instance.html#Lifecycle-Diagram";
+						case "errorCaptured":
+							fieldsToBeGenerated.set(field.name, f);
+							field.doc = "Called when an error from any descendent component is captured. The hook receives three arguments: the error, the component instance that triggered the error, and a string containing information on where the error was captured. The hook can return `false` to stop the error from propagating further.\n\rSee also: https://vuejs.org/v2/guide/instance.html#Lifecycle-Diagram";
 					}
-				}
+				case _:
 			}
 		}
 

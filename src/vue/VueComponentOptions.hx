@@ -16,5 +16,6 @@ typedef VueComponentOptions = {
 	?updated:() -> Void,
 	?activated:() -> Void,
 	?beforeDestroy:() -> Void,
-	?destroyed:() -> Void
+	?destroyed:() -> Void,
+	?errorCaptured:(error:Dynamic, component:Any, info:String) -> Bool
 }
