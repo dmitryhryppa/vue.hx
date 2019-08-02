@@ -12,7 +12,7 @@ import js.html.HtmlElement;
 @:native("Vue")
 extern class Vue {
 	public static function use(extension:Dynamic):Void;
-	public static function component(tag:String, ?options:Any):Void;
+	public static function component(tag:String, ?options:VueComponentOptions):Void;
 	public var el:HtmlElement;
 	@:native("$options")
 	public var options:VueOptions<Any>;
