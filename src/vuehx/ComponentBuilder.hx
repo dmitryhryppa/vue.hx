@@ -179,6 +179,30 @@ class ComponentBuilder {
 				}
 			});
 		}
+
+		//Gen constructor if it is not exists
+		var constructorExists:Bool = false;
+		for (field in fields) {
+			if (field.name == "new") {
+				constructorExists = true;
+				break;
+			}
+		}
+		if (!constructorExists) {
+			fields.push({
+				name: "new",
+				access: [APublic],
+				kind: FFun({
+					args: [],
+					ret: null,
+					expr: {
+						expr: EBlock([]),
+						pos: pos
+					}
+				}),
+				pos: pos
+			});
+		}
 		return objFields;
 	}
 
