@@ -21,6 +21,18 @@ class ComponentBuilder {
 		final pos:Position = Context.currentPos();
 		final c:ClassType = Context.getLocalClass().get();
 		var vueCompFields:Array<ObjectField> = [];
+		fields.push({
+			name: "__name",
+			access: [APublic, AFinal],
+			kind: FVar(macro:String, {
+				expr: EConst(CString(
+					(~/([^_A-Z])([A-Z])/g).replace(c.name, "$1-$2").toLowerCase()
+				)),
+				pos: pos
+			}),
+			meta: [{name: ":noCompletion", pos: pos}],
+			pos: pos
+		});
 
 		inline function getMetaContent(expr:ExprDef):Null<String> {
 			return switch (expr) {
