@@ -1,31 +1,31 @@
 package;
-import js.Browser;
-import vue.*;
-import vuehx.IVueComponent;
+import vuehx.*;
+
+class Index {
+	static function main() {
+		//Register component
+		VueApp.component(new MyComponent());
+		//Init vue
+		final app = new VueApp();
+	}
+}
 
 //Path to the template file:
 @:vue.template("./MyTemplate.vue")
-class Index implements IVueComponent {
-	static function main() {
-		//Register component
-		Vue.component("index-comp", new Index().asComponent());
-
-		//Init vue
-		final vm = new Vue({el: "#app"});
-	}
-
+class MyComponent implements IVueComponent {
 	@:vue.data
-	final message:String = "Hello World!";
+	final data = {
+		message: "Clicks: 0"
+	};
 
-	function new() {
-	}
-
-	function mounted() {
-		trace("I'm mounted!");
-	}
+	var clickCounter:Int = 0;
 
 	@:vue.method
-	function onButtonClick() {
-		js.Browser.alert("Vue.js + Haxe!");
+	function onButtonClick():Void {
+		data.message = 'Clicks: ${++clickCounter}';
+	}
+
+	function mounted():Void {
+		trace("I'm mounted!");
 	}
 }

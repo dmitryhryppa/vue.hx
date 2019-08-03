@@ -2,3 +2,4 @@
 -m Index
 -js ./index.js
 -dce full
+-D analyzer-optimize
