@@ -25,9 +25,7 @@ class ComponentBuilder {
 			name: "__name",
 			access: [APublic, AFinal],
 			kind: FVar(macro:String, {
-				expr: EConst(CString(
-					(~/([^_A-Z])([A-Z])/g).replace(c.name, "$1-$2").toLowerCase()
-				)),
+				expr: EConst(CString((~/([^_A-Z])([A-Z])/g).replace(c.name, "$1-$2").toLowerCase())),
 				pos: pos
 			}),
 			meta: [{name: ":noCompletion", pos: pos}],
@@ -36,10 +34,7 @@ class ComponentBuilder {
 
 		inline function getMetaContent(expr:ExprDef):Null<String> {
 			return switch (expr) {
-				case EConst(c): switch (c) {
-						case CString(s): s;
-						case _: null;
-					}
+				case EConst(CString(s)): s;
 				case _: null;
 			}
 		};
@@ -180,7 +175,7 @@ class ComponentBuilder {
 			});
 		}
 
-		//Gen constructor if it is not exists
+		// Gen constructor if it is not exists
 		var constructorExists:Bool = false;
 		for (field in fields) {
 			if (field.name == "new") {
