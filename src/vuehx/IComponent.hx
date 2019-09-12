@@ -4,7 +4,7 @@ import vue.VueComponentOptions;
 
 @:remove
 @:autoBuild(vuehx.ComponentBuilder.build())
-interface IVueComponent {
+interface IComponent {
 	public final __name:String;
 	function asComponent():Dynamic;
 }

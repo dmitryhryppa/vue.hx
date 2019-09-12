@@ -2,5 +2,7 @@ package vue;
 
 typedef Route = {
 	path:String,
-	?component:VueComponentOptions
+	?name:String,
+	?component:VueComponentOptions,
+	?children:Array<Route>
 }
