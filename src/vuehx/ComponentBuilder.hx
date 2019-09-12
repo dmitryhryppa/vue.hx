@@ -40,19 +40,17 @@ class ComponentBuilder {
 		};
 
 		for (entry in c.meta.get()) {
-			if (entry.params.length > 0) {
+			if (entry.params != null && entry.params.length > 0) {
 				switch (entry.name) {
 					case ":vue.props":
 						{
-							if (entry.params != null) {
-								vueCompFields.push({
-									field: "props",
-									expr: {
-										expr: EBlock(entry.params),
-										pos: pos
-									}
-								});
-							}
+							vueCompFields.push({
+								field: "props",
+								expr: {
+									expr: EBlock(entry.params),
+									pos: pos
+								}
+							});
 						}
 					case ":vue.template":
 						{
@@ -60,6 +58,18 @@ class ComponentBuilder {
 							if (v != null) {
 								vueCompFields.push(parseTemplate(v, fields));
 							}
+						}
+					case ":vue.templatePath":
+						switch entry.params[0].expr {
+							case EConst(CString(s)):
+								fields.push({
+									name: "__path",
+									access: [APublic, AFinal],
+									kind: FVar(macro:String, entry.params[0]),
+									meta: [{name: ":noCompletion", pos: pos}, {name: ":keep", pos: pos}],
+									pos: pos
+								});
+							case _:
 						}
 				}
 			}
@@ -106,6 +116,7 @@ class ComponentBuilder {
 			doc: '',
 			access: [APublic, AInline],
 			pos: pos,
+			meta: [{name: ":keep", pos: pos}],
 			kind: FFun({
 				args: [],
 				ret: TPath({pack: ["vue"], name: "VueComponentOptions"}),
